@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <!--vertex shader program in GLSL-->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute  vec4 vertPosition;
+        attribute  vec4 vertColor;
+        varying    vec4 fcolor;
+        
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+        
+        void main()
+        {
+          fcolor = vertColor;
+          gl_Position = projectionMatrix * modelViewMatrix * vertPosition;
+        }
+    </script>
+
+    <!--fragment shader program in GLSL-->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 fcolor;
+
+        void main()
+        {
+          gl_FragColor = fcolor;
+        }
+    </script>
+
+    <!--attach necessary javascript files-->
+    <script type="text/javascript" src="webgl-utils.js"></script>
+    <script type="text/javascript" src="MV.js"></script>
+    <script type="text/javascript" src="MyCubeViewer.js"></script>
+
+    <!--instruct the GL function in javascript to be called when the body loads in-->
+    <body onload="initGL();">
+
+        <!--setup the canvas for WebGL-->
+        <canvas id="cube-canvas" width="1024"" height="1024">
+            Your browser does not support HTML5
+        </canvas>
+
+        <!--depth slider-->
+        <div>
+            Depth .5
+            <input id="depthSlider" type="range"
+              min="1.1" max="6" step="0.1" value ="3" />
+            3
+        </div>
+
+        <!--radius slider-->
+        <div>
+            Radius 0
+            <input id="radiusSlider" type="range"
+              min="0" max="5" step="0.2" value ="2" />
+            3
+        </div>
+
+        <!--theta slider-->
+        <div>
+            Down
+            <input id="thetaSlider" type="range"
+              min="-10" max="10" step="1" value ="0" />
+            Up
+        </div>
+
+        <!--phi slider-->
+        <div>
+            Left
+            <input id="phiSlider" type="range"
+              min="-10" max="10" step="1" value ="0" />
+            Right
+        </div>
+    </body>
+</html>

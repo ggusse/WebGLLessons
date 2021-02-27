@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <!--vertex shader program in GLSL-->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vertPosition;
+        attribute vec4 vertColor;
+        varying vec4 fragColor;
+        uniform vec3 theta;
+
+        void main() {
+            //create vectors for sin and cosine of theta for each axis
+            vec3 angles = radians(theta);
+            vec3 cos = cos(angles);
+            vec3 sin = sin(angles);
+
+            //rotation matrix for the x axis
+            mat4 xRot = mat4(1.0,  0.0,  0.0, 0.0,
+		                    0.0,  cos.x,  sin.x, 0.0,
+		                    0.0, -sin.x,  cos.x, 0.0,
+		                    0.0,  0.0,  0.0, 1.0);
+    
+            //rotation matrix for the y axis
+            mat4 yRot = mat4(cos.y, 0.0, -sin.y, 0.0,
+		                    0.0, 1.0,  0.0, 0.0,
+		                    sin.y, 0.0,  cos.y, 0.0,
+		                    0.0, 0.0,  0.0, 1.0);
+
+            //rotation matrix for the z axis
+            mat4 zRot = mat4(cos.z, sin.z, 0.0, 0.0,
+		                    -sin.z,  cos.z, 0.0, 0.0,
+		                    0.0,  0.0, 1.0, 0.0,
+		                    0.0,  0.0, 0.0, 1.0);
+
+            fragColor = vertColor;
+            gl_Position = vertPosition * xRot * yRot * zRot;
+            gl_Position.z = gl_Position.z;
+        }
+    </script>
+
+    <!--fragment shader program in GLSL-->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 fragColor;
+
+        void main() {
+            gl_FragColor = fragColor;
+        }
+    </script>
+
+    <!--attach necessary javascript files-->
+    <script type="text/javascript" src="webgl-utils.js"></script>
+    <script type="text/javascript" src="MV.js"></script>
+    <script type="text/javascript" src="MyCube.js"></script>
+
+    <!--instruct the GL function in javascript to be called when the body loads in-->
+    <body onload="initGL();">
+
+        <!--setup the canvas for WebGL-->
+        <canvas id="cube-canvas" width="1024"" height="1024">
+            Your browser does not support HTML5
+        </canvas>
+    </body>
+</html>
